@@ -64,6 +64,62 @@ struct TransparentShape : Shape {
   }   
 };
 
+// Now we implement decorate pattern through 
+// templates
+
+template<typename T>
+struct ColoredShape_t : T {
+  std::string colour;
+
+  template<typename ...Args>
+  ColoredShape_t(const std::string _colour, Args ...args)
+    : T(std::forward<Args>(args)...), colour(_colour)
+    {}
+
+  std::string str() const override {
+    std::ostringstream oss;
+    oss  << T::str() << "has the colour " << colour << " ";
+    return oss.str();
+  } 
+
+};
+
+
+template<typename T>
+struct TransparentShape_t : T {
+  int transperancy;
+
+  template<typename ...Args>
+  TransparentShape_t(const int _transperancy, Args ...args)
+    : T(std::forward<Args>(args)...), transperancy(_transperancy)
+    {}
+
+   std::string str() const override {
+    std::ostringstream oss;
+    oss  << T::str() << "has transperancy of " << transperancy << "% ";
+    return oss.str();
+  } 
+
+};
+
+template<typename T>
+struct BrightnessShape_t : T {
+  int brightness;
+
+  template<typename ...Args>
+  BrightnessShape_t(const int _brightness, Args ...args)
+    : T(std::forward<Args>(args)...), brightness(_brightness)
+    {}
+
+   std::string str() const override {
+    std::ostringstream oss;
+    oss  << T::str() << "has brightness of " << brightness << "% ";
+    return oss.str();
+  } 
+
+};
+
+
 int main() {
   Circle c1{10.0f};
   ColouredShape redCircle{c1, "red"};
@@ -79,5 +135,10 @@ int main() {
     50
   };
   std::cout << lightgraySquare.str() << std::endl;
+
+  // Implementation using templates
+  BrightnessShape_t<ColoredShape_t<TransparentShape_t<Square>>> sq1 = {20,"red", 51,5};
+  std::cout << sq1.str() << std::endl;
+
   return 0;
 }
