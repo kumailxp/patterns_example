@@ -115,8 +115,7 @@ struct BrightnessShape_t : T {
     std::ostringstream oss;
     oss  << T::str() << "has brightness of " << brightness << "% ";
     return oss.str();
-  } 
-
+  }
 };
 
 
@@ -135,9 +134,13 @@ int main() {
     50
   };
   std::cout << lightgraySquare.str() << std::endl;
+  // The problem with the above approach is that we
+  // cannot change the propertiy of square object.
 
   // Implementation using templates
   BrightnessShape_t<ColoredShape_t<TransparentShape_t<Square>>> sq1 = {20,"red", 51,5};
+  std::cout << sq1.str() << std::endl;
+  sq1.resize(100);
   std::cout << sq1.str() << std::endl;
 
   return 0;
