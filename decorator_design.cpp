@@ -29,3 +29,9 @@ struct Square : Shape {
     return oss.str();
   }
 };
+
+int main() {
+
+  std::cout << "Hello" << std::endl;
+  return 0;
+}
