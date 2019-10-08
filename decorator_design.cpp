@@ -13,7 +13,7 @@ struct Circle : Shape {
 
   std::string str() const override {
     std::ostringstream oss;
-    oss << "A circle of radius " << radius;
+    oss << "A circle of radius " << radius << " ";
     return oss.str();
   }
 };
@@ -25,13 +25,59 @@ struct Square : Shape {
 
   std::string str() const override {
     std::ostringstream oss;
-    oss << "A square of length and breath " << len;
+    oss << "A square of length and breath " << len << " ";
     return oss.str();
   }
 };
 
-int main() {
+// NOTE: The issue with this approach is that we can not 
+// call member functions of shapes. So we need a new approach. 
 
-  std::cout << "Hello" << std::endl;
+// Create first decorator
+struct ColouredShape : Shape {
+  const Shape& shape;
+  std::string colour;
+
+  ColouredShape(const Shape& _shape, std::string _colour)
+    : shape{_shape}, colour{_colour} {}
+
+   std::string str() const override {
+    std::ostringstream oss;
+    oss << shape.str() << "has the colour " << colour << " ";
+    return oss.str();
+  }   
+};
+
+// Create second decorator
+struct TransparentShape : Shape {
+  const Shape& shape;
+  int transperancy;
+
+  TransparentShape(const Shape& _shape, int _transperancy)
+    : shape{_shape}, transperancy{_transperancy} {}
+
+   std::string str() const override {
+    std::ostringstream oss;
+    oss << shape.str() << "has transperancy of " 
+    << transperancy << "% ";
+    return oss.str();
+  }   
+};
+
+int main() {
+  Circle c1{10.0f};
+  ColouredShape redCircle{c1, "red"};
+  std::cout << redCircle.str() << std::endl;
+  Square s1{20.0f};
+  ColouredShape blueSquare{s1, "blue"};
+  std::cout << blueSquare.str() << std::endl;
+
+  // We can also mix up decorators to add
+  // multiple properties
+  TransparentShape lightgraySquare { 
+    ColouredShape{Square{10},"gray"}, 
+    50
+  };
+  std::cout << lightgraySquare.str() << std::endl;
   return 0;
 }
