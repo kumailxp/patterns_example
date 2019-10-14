@@ -55,15 +55,21 @@ struct MarkdownPrinting : PrintingStrategy {
   }
 };
 
-struct PointProcessor : std::vector<Point> {
-private:
+struct StringProcessor {
+protected:
   PrintingStrategy* ps_;
+public:
+  StringProcessor(PrintingStrategy* ps) : ps_(ps) {}
+   virtual void print() = 0;
+};
+
+struct PointProcessor : StringProcessor, std::vector<Point> {
 public:
   PointProcessor(const std::initializer_list<value_type>& points,
     PrintingStrategy* ps) :
     std::vector<Point>(points),
-    ps_(ps) {}
-  void print() {
+    StringProcessor(ps) {}
+  void print() override {
     for (Point &I : *this)
       ps_->output1(I.str());
   }
