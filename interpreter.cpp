@@ -48,9 +48,6 @@ std::vector<Token> lex(const std::string &input) {
       }
     }
   }
-  for(auto& I : result) {
-    std::cout << "r: " << I << std::endl;
-  }
   return result;
 }
 
@@ -86,7 +83,6 @@ std::shared_ptr<Element> parse(const std::vector<Token>& tokens) {
       case Token::integer: 
       {
         int value = std::stoi(token.text_);
-        std::cout << "value: " << value << std::endl;
         auto integer = std::make_shared<Integer>(value);
         if(!have_lhs) {
           result->lhs = integer;
@@ -108,10 +104,6 @@ std::shared_ptr<Element> parse(const std::vector<Token>& tokens) {
             break;
 
         std::vector<Token> subExpression(&tokens[i+1], &tokens[j]);
-        for(auto& I : subExpression)  {
-          std::cout << "sub: " << I << std::endl;
-        }
-        std::cout << "***" << std::endl;
         auto element = parse(subExpression);
         if(!have_lhs) {
           result->lhs = element;
